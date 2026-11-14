@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, {{ user.first_name|default:user.username }}</h2>
+<p>This is your space to let it out and be heard.</p>
+
+<div class="card"><strong>Latest posts</strong><br>Coming soon: the Rant Board feed.</div>
+<div class="card"><strong>Daily mood check-in</strong><br>Coming soon.</div>
+<div class="card"><strong>My chats</strong><br>Coming soon: your private conversations.</div>
+
+<p><a href="{% url 'profile' %}">View my profile</a></p>
+{% endblock %}
