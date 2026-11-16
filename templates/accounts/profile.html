@@ -16,5 +16,18 @@
 <a href="{% url 'edit_profile' %}">Edit profile</a>
 
 <h3>My past posts</h3>
-<div class="card">Coming soon: your Rant Board posts will appear here.</div>
+{% for rant in my_rants %}
+  <div class="rant">
+    <div class="meta">
+      {{ rant.created_at|date:"M j, Y" }}
+      {% if rant.is_anonymous %}&middot; anonymous{% endif %}
+      {% if rant.mood %}<span class="tag">{{ rant.mood.name }}</span>{% endif %}
+    </div>
+    <div class="rant-body">{{ rant.content|truncatechars:120 }}</div>
+    <div class="actions"><a href="{% url 'board:detail' rant.pk %}">Open</a></div>
+  </div>
+{% empty %}
+  <div class="card">You haven't posted anything yet. <a href="{% url 'board:create' %}">Post a rant</a></div>
+{% endfor %}
+<p><a href="{% url 'board:mine' %}">See all my rants</a></p>
 {% endblock %}

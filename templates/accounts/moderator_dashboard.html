@@ -4,11 +4,35 @@
 <h2>Moderator Dashboard</h2>
 <p>Welcome, {{ user.first_name|default:user.username }}.</p>
 
+<div class="stats">
+  <div class="card"><strong>{{ total_rants }}</strong><br>Total rants</div>
+  <div class="card"><strong>{{ anonymous_rants }}</strong><br>Anonymous rants</div>
+</div>
+
+<p><a class="button" href="{% url 'board:list' %}">Review the Rant Board</a></p>
+
+<h3>Recent rants</h3>
+{% for rant in recent_rants %}
+  <div class="rant">
+    <div class="meta">
+      {{ rant.author.username }}{% if rant.is_anonymous %} (posted anonymously){% endif %}
+      &middot; {{ rant.created_at|timesince }} ago
+    </div>
+    <div class="rant-body">{{ rant.content|truncatechars:140 }}</div>
+    <div class="actions">
+      <a href="{% url 'board:detail' rant.pk %}">Open</a>
+      <a href="{% url 'board:delete' rant.pk %}">Delete</a>
+    </div>
+  </div>
+{% empty %}
+  <div class="card">No rants have been posted yet.</div>
+{% endfor %}
+
 <div class="card"><strong>Reports to review</strong><br>Coming soon: the Block/Report queue.</div>
 
 <ul>
   {% if user.is_staff %}
-    <li><a href="/admin/">Manage users and tags (Django admin)</a></li>
+    <li><a href="/admin/">Manage users, tags and rants (Django admin)</a></li>
   {% endif %}
   <li><a href="{% url 'profile' %}">My profile</a></li>
 </ul>

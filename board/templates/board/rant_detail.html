@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Rant{% endblock %}
+{% block content %}
+<p><a href="{% url 'board:list' %}">&larr; Back to the board</a></p>
+{% include "board/_rant_card.html" with full=True %}
+{% endblock %}

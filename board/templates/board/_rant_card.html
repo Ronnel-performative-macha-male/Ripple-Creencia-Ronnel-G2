@@ -1,0 +1,35 @@
+<div class="rant">
+  {% if rant.title %}<h3>{{ rant.title }}</h3>{% endif %}
+  <div class="meta">
+    {{ rant.shown_author }} &middot; {{ rant.created_at|date:"M j, Y g:i A" }}
+    {% if rant.was_edited %}(edited){% endif %}
+    {% if rant.mood %}<span class="tag">{{ rant.mood.name }}</span>{% endif %}
+  </div>
+  <div class="rant-body">{% if full %}{{ rant.content }}{% else %}{{ rant.content|truncatechars:300 }}{% endif %}</div>
+
+  <div class="actions">
+    {% if not rant.is_mine %}
+      {% for value, label in reaction_choices %}
+        <form method="post" action="{% url 'board:react' rant.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="kind" value="{{ value }}">
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="react {% if rant.my_reaction == value %}active{% endif %}"
+                  aria-pressed="{% if rant.my_reaction == value %}true{% else %}false{% endif %}">
+            {% if value == 'heart' %}&#10084;&#65039;{% elif value == 'hug' %}&#129303;{% else %}&#128066;{% endif %} {{ label }}
+          </button>
+        </form>
+      {% endfor %}
+    {% endif %}
+    {% if not full %}<a href="{% url 'board:detail' rant.pk %}">Open</a>{% endif %}
+    {% if rant.can_edit %}<a href="{% url 'board:edit' rant.pk %}">Edit</a>{% endif %}
+    {% if rant.can_delete %}<a href="{% url 'board:delete' rant.pk %}">Delete</a>{% endif %}
+  </div>
+
+  {% if rant.show_counts %}
+    <div class="private-note">
+      Support received (only you{% if not rant.is_mine %} and moderators{% endif %} can see this):
+      &#10084;&#65039; {{ rant.heart_count }} &middot; &#129303; {{ rant.hug_count }} &middot; &#128066; {{ rant.hear_count }}
+    </div>
+  {% endif %}
+</div>

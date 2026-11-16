@@ -4,9 +4,33 @@
 <h2>Welcome, {{ user.first_name|default:user.username }}</h2>
 <p>This is your space to let it out and be heard.</p>
 
-<div class="card"><strong>Latest posts</strong><br>Coming soon: the Rant Board feed.</div>
+<p>
+  <a class="button" href="{% url 'board:create' %}">Post a rant</a>
+  <a href="{% url 'board:list' %}">Open the Rant Board</a>
+</p>
+
+<div class="stats">
+  <div class="card"><strong>{{ my_rant_count }}</strong><br>My rants</div>
+  <div class="card"><strong>{{ support_received }}</strong><br>Support received</div>
+</div>
+
+<h3>Latest posts</h3>
+{% for rant in latest_rants %}
+  <div class="rant">
+    <div class="meta">
+      {% if rant.is_anonymous %}Anonymous{% else %}{{ rant.author.username }}{% endif %}
+      &middot; {{ rant.created_at|timesince }} ago
+      {% if rant.mood %}<span class="tag">{{ rant.mood.name }}</span>{% endif %}
+    </div>
+    <div class="rant-body">{{ rant.content|truncatechars:140 }}</div>
+    <div class="actions"><a href="{% url 'board:detail' rant.pk %}">Read and respond</a></div>
+  </div>
+{% empty %}
+  <div class="card">No posts yet. Be the first to share something.</div>
+{% endfor %}
+
 <div class="card"><strong>Daily mood check-in</strong><br>Coming soon.</div>
 <div class="card"><strong>My chats</strong><br>Coming soon: your private conversations.</div>
 
-<p><a href="{% url 'profile' %}">View my profile</a></p>
+<p><a href="{% url 'board:mine' %}">My rants</a> &middot; <a href="{% url 'profile' %}">View my profile</a></p>
 {% endblock %}

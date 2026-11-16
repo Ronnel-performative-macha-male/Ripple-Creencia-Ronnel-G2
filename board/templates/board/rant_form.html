@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }}{% endblock %}
+{% block content %}
+<h2>{{ mode }}</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="primary" type="submit">{% if mode == "Edit rant" %}Save changes{% else %}Post{% endif %}</button>
+  <a href="{% url 'board:list' %}">Cancel</a>
+</form>
+{% endblock %}

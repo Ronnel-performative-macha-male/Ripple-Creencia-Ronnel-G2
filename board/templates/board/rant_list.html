@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+<h2>{{ heading }}</h2>
+<p>
+  <a class="button" href="{% url 'board:create' %}">Post a rant</a>
+  {% if heading == "Rant Board" %}<a href="{% url 'board:mine' %}">My rants</a>{% else %}<a href="{% url 'board:list' %}">Back to the board</a>{% endif %}
+</p>
+
+{% if moods %}
+<form method="get">
+  <p>
+    <label for="mood">Filter by mood</label>
+    <select name="mood" id="mood" onchange="this.form.submit()">
+      <option value="">All moods</option>
+      {% for m in moods %}
+        <option value="{{ m.pk }}" {% if selected_mood == m.pk|stringformat:"s" %}selected{% endif %}>{{ m.name }}</option>
+      {% endfor %}
+    </select>
+    <noscript><button type="submit">Apply</button></noscript>
+  </p>
+</form>
+{% endif %}
+
+{% for rant in page.object_list %}
+  {% include "board/_rant_card.html" with full=False %}
+{% empty %}
+  <div class="card">Nothing here yet. Be the first to share something.</div>
+{% endfor %}
+
+{% if page.has_other_pages %}
+<div class="pager">
+  {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}{% if selected_mood %}&mood={{ selected_mood }}{% endif %}">&larr; Newer</a>{% else %}<span></span>{% endif %}
+  <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a href="?page={{ page.next_page_number }}{% if selected_mood %}&mood={{ selected_mood }}{% endif %}">Older &rarr;</a>{% else %}<span></span>{% endif %}
+</div>
+{% endif %}
+{% endblock %}
