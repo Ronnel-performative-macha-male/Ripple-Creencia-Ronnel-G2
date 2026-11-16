@@ -1,0 +1,19 @@
+<article class="rant">
+  <div class="rant-head">
+    <span class="avatar{% if rant.is_anonymous %} anon{% endif %}" aria-hidden="true">{% if rant.is_anonymous %}?{% elif rant.is_mine %}{{ rant.author.username|first|upper }}{% else %}{{ rant.shown_author|first|upper }}{% endif %}</span>
+    <div class="meta">
+      <strong>{{ rant.shown_author }}</strong>
+      <time datetime="{{ rant.created_at|date:'c' }}">{{ rant.created_at|date:"M j, Y g:i A" }}</time>{% if rant.was_edited %} &middot; edited{% endif %}
+    </div>
+    {% if rant.mood %}<span class="tag">{{ rant.mood.name }}</span>{% endif %}
+  </div>
+
+  {% if rant.title %}<h3>{{ rant.title }}</h3>{% endif %}
+  <div class="rant-body">{% if full %}{{ rant.content }}{% else %}{{ rant.content|truncatechars:300 }}{% endif %}</div>
+
+  <div class="actions">
+    {% if not full %}<a href="{% url 'board:detail' rant.pk %}">Open</a>{% endif %}
+    {% if rant.can_edit %}<a href="{% url 'board:edit' rant.pk %}">Edit</a>{% endif %}
+    {% if rant.can_delete %}<a class="delete" href="{% url 'board:delete' rant.pk %}">Delete</a>{% endif %}
+  </div>
+</article>

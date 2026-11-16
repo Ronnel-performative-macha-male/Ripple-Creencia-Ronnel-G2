@@ -1,11 +1,35 @@
 {% extends "base.html" %}
-{% block title %}Register{% endblock %}
-{% block content %}
-<h2>Create an account</h2>
-<form method="post" novalidate>
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="primary" type="submit">Register</button>
-</form>
-<p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+{% block title %}Create an account{% endblock %}
+{% block body %}
+<div class="auth-page">
+  <div class="auth-card">
+    {% url 'login' as login_url %}
+    {% include "includes/auth_art.html" with pill_url=login_url pill_label="Log in" %}
+
+    <section class="auth-panel">
+      <div class="auth-form">
+        <h1>Create an account</h1>
+        <p class="auth-sub">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+
+        {% include "includes/messages.html" %}
+        {% if form.non_field_errors %}
+          <div class="msg error" role="alert">{{ form.non_field_errors|join:" " }}</div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="row-2">
+            {% include "includes/field.html" with field=form.first_name %}
+            {% include "includes/field.html" with field=form.last_name %}
+          </div>
+          {% include "includes/field.html" with field=form.username %}
+          {% include "includes/field.html" with field=form.email %}
+          {% include "includes/field.html" with field=form.password1 password=True %}
+          {% include "includes/field.html" with field=form.password2 password=True %}
+          <button class="btn block" type="submit">Create account</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
 {% endblock %}

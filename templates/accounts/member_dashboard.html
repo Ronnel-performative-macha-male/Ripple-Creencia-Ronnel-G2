@@ -1,12 +1,40 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h2>Welcome, {{ user.first_name|default:user.username }}</h2>
-<p>This is your space to let it out and be heard.</p>
+{% url 'board:list' as board_url %}
+<section class="hero">
+  <h1>Welcome, {{ user.first_name|default:user.username }}</h1>
+  <p>This is your space to let it out and be heard.</p>
+  <div class="actions">
+    {% if board_url %}<a class="btn" href="{{ board_url }}">Open the Rant Board</a>{% endif %}
+    <a class="btn ghost" href="{% url 'profile' %}">View my profile</a>
+  </div>
+</section>
 
-<div class="card"><strong>Latest posts</strong><br>Coming soon: the Rant Board feed.</div>
-<div class="card"><strong>Daily mood check-in</strong><br>Coming soon.</div>
-<div class="card"><strong>My chats</strong><br>Coming soon: your private conversations.</div>
-
-<p><a href="{% url 'profile' %}">View my profile</a></p>
+<div class="grid">
+  <article class="card feature">
+    <div class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <h3>Latest posts</h3>
+    <p class="muted">The Rant Board feed will show up here.</p>
+    <span class="badge">Coming soon</span>
+  </article>
+  <article class="card feature">
+    <div class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+    </div>
+    <h3>Daily mood check-in</h3>
+    <p class="muted">A quick way to log how you're feeling.</p>
+    <span class="badge">Coming soon</span>
+  </article>
+  <article class="card feature">
+    <div class="icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"/><circle cx="12" cy="8" r="4"/></svg>
+    </div>
+    <h3>My chats</h3>
+    <p class="muted">Your private conversations will live here.</p>
+    <span class="badge">Coming soon</span>
+  </article>
+</div>
 {% endblock %}

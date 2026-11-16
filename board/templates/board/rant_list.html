@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+{% with view=request.resolver_match.url_name %}
+<div class="page-head">
+  <div>
+    <h1>{{ heading }}</h1>
+    <div class="toolbar" style="margin-top:14px">
+      <a class="pill{% if view == 'list' %} is-active{% endif %}" href="{% url 'board:list' %}">All rants</a>
+      <a class="pill{% if view == 'mine' %} is-active{% endif %}" href="{% url 'board:mine' %}">My rants</a>
+    </div>
+  </div>
+  <a class="btn" href="{% url 'board:create' %}">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    Post a rant
+  </a>
+</div>
+{% endwith %}
+
+{% if moods %}
+  <form method="get" class="filter">
+    <label for="mood">Filter by mood</label>
+    <select name="mood" id="mood" onchange="this.form.submit()">
+      <option value="">All moods</option>
+      {% for tag in moods %}
+        <option value="{{ tag.id }}" {% if selected_mood == tag.id|stringformat:"s" %}selected{% endif %}>{{ tag.name }}</option>
+      {% endfor %}
+    </select>
+    <noscript><button class="btn sm" type="submit">Apply</button></noscript>
+  </form>
+{% endif %}
+
+{% for rant in page.object_list %}
+  {% include "board/_rant_card.html" %}
+{% empty %}
+  <div class="empty">
+    <p>No rants here yet.</p>
+    <a class="btn" href="{% url 'board:create' %}">Be the first to post one</a>
+  </div>
+{% endfor %}
+
+{% if page.has_other_pages %}
+  <nav class="pager" aria-label="Pagination">
+    {% if page.has_previous %}
+      <a href="?{% if selected_mood %}mood={{ selected_mood }}&amp;{% endif %}page={{ page.previous_page_number }}">&larr; Newer</a>
+    {% else %}<span></span>{% endif %}
+    <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}
+      <a href="?{% if selected_mood %}mood={{ selected_mood }}&amp;{% endif %}page={{ page.next_page_number }}">Older &rarr;</a>
+    {% else %}<span></span>{% endif %}
+  </nav>
+{% endif %}
+{% endblock %}

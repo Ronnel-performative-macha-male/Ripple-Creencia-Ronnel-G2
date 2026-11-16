@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Moderator Dashboard{% endblock %}
 {% block content %}
-<h2>Moderator Dashboard</h2>
-<p>Welcome, {{ user.first_name|default:user.username }}.</p>
+<section class="hero">
+  <span class="badge">Moderator</span>
+  <h1 style="margin-top:12px">Moderator Dashboard</h1>
+  <p>Welcome, {{ user.first_name|default:user.username }}.</p>
+</section>
 
-<div class="card"><strong>Reports to review</strong><br>Coming soon: the Block/Report queue.</div>
+<article class="card">
+  <h3>Reports to review</h3>
+  <p class="muted">The Block / Report queue will show up here.</p>
+  <span class="badge">Coming soon</span>
+</article>
 
-<ul>
-  {% if user.is_staff %}
-    <li><a href="/admin/">Manage users and tags (Django admin)</a></li>
-  {% endif %}
-  <li><a href="{% url 'profile' %}">My profile</a></li>
-</ul>
+<article class="card">
+  <h3>Shortcuts</h3>
+  <div class="toolbar" style="margin-top:12px">
+    {% if user.is_staff %}<a class="btn ghost sm" href="/admin/">Manage users and tags</a>{% endif %}
+    <a class="btn ghost sm" href="{% url 'profile' %}">My profile</a>
+  </div>
+</article>
 {% endblock %}

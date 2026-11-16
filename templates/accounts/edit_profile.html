@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Edit Profile{% endblock %}
 {% block content %}
-<h2>Edit Profile</h2>
-<form method="post" novalidate>
+<a class="back-link" href="{% url 'profile' %}">&larr; Back to profile</a>
+<div class="page-head"><h1>Edit profile</h1></div>
+
+<form class="card form-card" method="post" novalidate>
   {% csrf_token %}
-  {{ form.as_p }}
-  <button class="primary" type="submit">Save changes</button>
-  <a href="{% url 'profile' %}">Cancel</a>
+  {% if form.non_field_errors %}<div class="msg error" role="alert">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+  <div class="row-2">
+    {% include "includes/field.html" with field=form.first_name %}
+    {% include "includes/field.html" with field=form.last_name %}
+  </div>
+  {% include "includes/field.html" with field=form.email %}
+  {% include "includes/field.html" with field=form.bio %}
+  {% include "includes/field.html" with field=form.tags %}
+  <div class="form-actions">
+    <button class="btn" type="submit">Save changes</button>
+    <a class="btn ghost" href="{% url 'profile' %}">Cancel</a>
+  </div>
 </form>
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Delete rant{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Delete this rant?</h1>
+    <p>This can't be undone.</p>
+  </div>
+</div>
+<article class="rant">
+  <div class="rant-body">{{ rant.content|truncatechars:200 }}</div>
+</article>
+<form method="post" class="form-actions">
+  {% csrf_token %}
+  <button class="btn danger-solid" type="submit">Yes, delete</button>
+  <a class="btn ghost" href="{% url 'board:detail' rant.pk %}">Cancel</a>
+</form>
+{% endblock %}

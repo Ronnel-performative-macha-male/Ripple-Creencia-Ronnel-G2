@@ -1,20 +1,30 @@
 {% extends "base.html" %}
 {% block title %}My Profile{% endblock %}
 {% block content %}
-<h2>My Profile</h2>
-<p><strong>Username:</strong> {{ profile_user.username }}</p>
-<p><strong>Name:</strong> {{ profile_user.first_name }} {{ profile_user.last_name }}</p>
-<p><strong>Email:</strong> {{ profile_user.email }}</p>
-<p><strong>Bio:</strong> {{ profile_user.bio|default:"No bio yet." }}</p>
-<p><strong>Tags:</strong>
-  {% for tag in profile_user.tags.all %}
-    <span class="tag">{{ tag.name }}</span>
-  {% empty %}
-    None selected
-  {% endfor %}
-</p>
-<a href="{% url 'edit_profile' %}">Edit profile</a>
+<section class="card">
+  <div class="profile-head">
+    <span class="avatar lg" aria-hidden="true">{{ profile_user.username|first|upper }}</span>
+    <div>
+      <h1>{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+      <div class="handle">@{{ profile_user.username }} &middot; <span class="badge">{{ profile_user.get_role_display }}</span></div>
+    </div>
+    <a class="btn ghost sm" style="margin-left:auto" href="{% url 'edit_profile' %}">Edit profile</a>
+  </div>
 
-<h3>My past posts</h3>
-<div class="card">Coming soon: your Rant Board posts will appear here.</div>
+  <dl class="details">
+    <dt>Email</dt><dd>{{ profile_user.email }}</dd>
+    <dt>Bio</dt><dd>{{ profile_user.bio|default:"No bio yet." }}</dd>
+    <dt>Tags</dt>
+    <dd>
+      {% for tag in profile_user.tags.all %}
+        <span class="tag">{{ tag.name }}</span>
+      {% empty %}
+        <span class="muted">None selected</span>
+      {% endfor %}
+    </dd>
+  </dl>
+</section>
+
+<h2 style="margin-top:32px">My past posts</h2>
+<div class="empty">Coming soon: your Rant Board posts will appear here.</div>
 {% endblock %}

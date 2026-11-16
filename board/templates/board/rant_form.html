@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'board:list' %}">&larr; Back to the board</a>
+<div class="page-head">
+  <div>
+    <h1>{{ mode }}</h1>
+    <p>Share your thoughts safely with the community.</p>
+  </div>
+</div>
+
+<form class="card form-card" method="post" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="msg error" role="alert">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+  {% include "includes/field.html" with field=form.title %}
+  {% include "includes/field.html" with field=form.mood %}
+  {% include "includes/field.html" with field=form.content %}
+  {% include "includes/field.html" with field=form.is_anonymous %}
+  <div class="form-actions">
+    <button class="btn" type="submit">{% if form.instance.pk %}Update rant{% else %}Post{% endif %}</button>
+    <a class="btn ghost" href="{% url 'board:list' %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}
