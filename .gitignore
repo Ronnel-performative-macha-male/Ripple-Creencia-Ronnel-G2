@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Local database file (the project must use PostgreSQL)
+db.sqlite3
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
